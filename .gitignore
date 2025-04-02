@@ -1,0 +1,57 @@
+# Ignore Factures and Travail folders in production
+Factures/
+Travail/
+AnnexesAdmission/
+
+# Ignore Factures and Travail folders in staging
+EnvTest/Factures/
+EnvTest/Travail/
+EnvTest/AnnexesAdmission/
+
+# Ignore Factures and Travail folders in development
+Files/Factures/
+Files/Travail/
+Files/AnnexesAdmission/
+
+# System files
+.DS_Store
+
+# Node.js dependencies
+node_modules/
+modules/
+dist/
+
+# Environment files
+.env.local
+.env.*.local
+.env
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# CFML & ColdFusion
+WEB-INF/
+wirebox/
+testbox/
+tests/results/
+.project
+settings.xml
+.settings/org.eclipse.core.resources.prefs
+
+# Intellij IDEA files
+*.iml
+*.ipr
+*.idea/
+run-tests.sh

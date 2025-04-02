@@ -1,0 +1,44 @@
+{
+  "name": "Ticket-Booking",
+  "version": "1.0.0",
+  "author": "Vorak Yun",
+  "location": "ForgeboxStorage",
+  "private": false,
+  "dependencies": {
+    "fw1": "4.2.0",
+    "bx-orm": "^1.0.0+1",
+    "bx-mssql": "^1.1.0+9"
+  },
+  "devDependencies": {
+    "testbox": "2.5.0+107"
+  },
+  "installPaths": {
+    "testbox": "testbox/",
+    "fw1": "framework/",
+    "bx-orm": "modules/bx-orm/",
+    "bx-mssql": "modules/bx-mssql/"
+  },
+  "scripts": {},
+  "ignore": ["**/.*", "/test/", "/tests/"],
+  "testbox": {
+    "runner": "http://localhost:8500/tests/runner.cfm"
+  },
+  "reinitWatchDelay": 500,
+  "reinitWatchPaths": "",
+  "createPackageDirectory": true,
+  "packageDirectory": "framework",
+  "engines": [
+    {
+      "type": "railo",
+      "version": ">=4.1.x"
+    },
+    {
+      "type": "lucee",
+      "version": ">=4.5.x"
+    },
+    {
+      "type": "adobe",
+      "version": ">=10.0.x"
+    }
+  ]
+}

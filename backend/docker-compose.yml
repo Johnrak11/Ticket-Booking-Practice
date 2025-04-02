@@ -1,0 +1,13 @@
+version: "1.0.0"
+
+services:
+  # SQL Server Database Service
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:latest
+    container_name: sqlserver-container
+    environment:
+      ACCEPT_EULA: Sa
+      SA_PASSWORD: SuperSecretPassword!23
+    ports:
+      - "1433:1433"
+    restart: always

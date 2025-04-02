@@ -1,0 +1,14 @@
+{
+    "name":"ticket-booking",
+    "openBrowser":"${openBrowser}",
+    "app":{
+        "cfengine":"adobe@2021"
+    },
+    "web":{
+        "host":"${host}",
+        "http":{
+            "port":"${httpPort}"
+        }
+    },
+    "cfconfigfile":"config/.cfconfig.json"
+}
