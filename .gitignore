@@ -45,6 +45,7 @@ pnpm-debug.log*
 WEB-INF/
 wirebox/
 testbox/
+framework/
 tests/results/
 .project
 settings.xml
