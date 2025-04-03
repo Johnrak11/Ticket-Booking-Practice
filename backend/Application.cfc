@@ -10,28 +10,26 @@ component extends="framework.one" {
 
     // Mapping framework and essential paths for FW/1 and application
     this.mappings["/framework"] = expandPath("./framework");
-    this.mappings["/bx-orm"] = expandPath("./modules/bx-orm");
-    this.mappings["/bx-mssql"] = expandPath("./modules/bx-mssql");
-    this.mappings["/routes"] = expandPath("./routes");
 
 
     // Enable ORM and configure settings
     this.ormEnabled = true;
     this.ormsettings = {
         cfclocation = "./model/beans",
-        dbcreate = "dropcreate", //dropcreate
+        dbcreate = "update", //dropcreate
         dialect =  "MicrosoftSQLServer", //"MySQL5InnoDB",
         eventhandling = true,
         eventhandler = "model.beans.eventhandler",
         flushAtRequestEnd =  false,
         logsql = true,
-        // secondaryCacheEnabled = true,
-        // cacheconfig = "/ehcache.xml",
         datasource = "ticket_booking"
     };
 
     // FW/1 Configuration
-    this.framework = {
+    variables.framework = {
+        name = "Ticket-Booking",
+		home = "main.default",
+		generateSES = true,
         // Automatically decode JSON request bodies
         decodeRequestBody = true,
         // For development mode
@@ -41,7 +39,8 @@ component extends="framework.one" {
         // Fallback view
         missingview = "main.missingView",
         // Load routes dynamically from router
-        routes = new routes.router().getRoutes()
+        routes = new routes.router().getRoutes(),
+        defaultNoViews = true
     };
 
     // Delegate lifecycle events to FW/1
@@ -49,6 +48,7 @@ component extends="framework.one" {
         return super.onApplicationStart();
     }
 
+    
     function onError(exception, event) {
         return super.onError(exception, event);
     }

@@ -1,22 +1,16 @@
 {
   "name": "Ticket-Booking",
-  "version": "1.0.0",
-  "author": "Vorak Yun",
   "location": "ForgeboxStorage",
   "private": false,
   "dependencies": {
-    "fw1": "4.2.0",
-    "bx-orm": "^1.0.0+1",
-    "bx-mssql": "^1.1.0+9"
-  },
-  "devDependencies": {
-    "testbox": "2.5.0+107"
+    "fw1": "^4.3.0"
   },
   "installPaths": {
-    "testbox": "testbox/",
     "fw1": "framework/",
-    "bx-orm": "modules/bx-orm/",
-    "bx-mssql": "modules/bx-mssql/"
+    "testbox": "testbox/"
+  },
+  "devDependencies": {
+    "testbox": "^6.3.1+15"
   },
   "scripts": {},
   "ignore": ["**/.*", "/test/", "/tests/"],

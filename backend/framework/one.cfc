@@ -1,19 +1,19 @@
 component {
-    variables._fw1_version = "4.3.2";
+    variables._fw1_version = "4.3.0";
     /*
-    Copyright (c) 2009-2018, Sean Corfield, Marcin Szczepanski, Ryan Cogswell
+      Copyright (c) 2009-2018, Sean Corfield, Marcin Szczepanski, Ryan Cogswell
 
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
+      Licensed under the Apache License, Version 2.0 (the "License");
+      you may not use this file except in compliance with the License.
+      You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+      http://www.apache.org/licenses/LICENSE-2.0
 
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
+      Unless required by applicable law or agreed to in writing, software
+      distributed under the License is distributed on an "AS IS" BASIS,
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+      See the License for the specific language governing permissions and
+      limitations under the License.
     */
 
     this.name = hash( getBaseTemplatePath() );
@@ -93,7 +93,7 @@ component {
         }
         var baseData = resolveBaseURL();
         if ( len( baseData.path ) && right( baseData.path, 1 ) == '/' &&
-                len( uri ) && left( uri, 1 ) == '/' ) {
+             len( uri ) && left( uri, 1 ) == '/' ) {
             if ( len( baseData.path ) == 1 ) baseData.path = '';
             else baseData.path = left( baseData.path, len( baseData.path ) - 1 );
         }
@@ -254,7 +254,7 @@ component {
 
         if ( structKeyExists( request._fw1, 'controllerExecutionStarted' ) ) {
             throw( type='FW1.controllerExecutionStarted', message="Controller '#action#' may not be added at this point.",
-                    detail='The controller execution phase has already started. Controllers may not be added by other controller methods.' );
+                   detail='The controller execution phase has already started. Controllers may not be added by other controller methods.' );
         }
 
         tuple.controller = getController( section = section, subsystem = subsystem );
@@ -325,7 +325,7 @@ component {
                 // ignore if session is not enabled
             }
             var trace = { tick = getTickCount(), msg = message,
-                            sub = '', s = '', i = '' };
+                          sub = '', s = '', i = '' };
             if ( arrayLen( arguments ) > 1 ) {
                 trace.v = arguments[2];
             }
@@ -401,7 +401,7 @@ component {
 
         if ( variables.framework.defaultSubsystem == '' ) {
             throw( type='FW1.subsystemNotSpecified', message='No subsystem specified and no default configured.',
-                    detail='When using subsystems, every request should specify a subsystem or variables.framework.defaultSubsystem should be configured.' );
+                   detail='When using subsystems, every request should specify a subsystem or variables.framework.defaultSubsystem should be configured.' );
         }
 
         return variables.framework.defaultSubsystem;
@@ -673,8 +673,8 @@ component {
     public boolean function isFrameworkReloadRequest() {
         setupRequestDefaults();
         return ( isDefined( 'URL' ) &&
-                    structKeyExists( URL, variables.framework.reload ) &&
-                    URL[ variables.framework.reload ] == variables.framework.password ) ||
+                 structKeyExists( URL, variables.framework.reload ) &&
+                 URL[ variables.framework.reload ] == variables.framework.password ) ||
             variables.framework.reloadApplicationOnEveryRequest;
     }
 
@@ -692,9 +692,9 @@ component {
         // regular expression so we match on subdirectories, meaning
         // /myexcludepath will match '/myexcludepath' and all subdirectories
         return listFindNoCase( variables.framework.unhandledExtensions,
-                                listLast( targetPath, '.' ) ) ||
+                               listLast( targetPath, '.' ) ) ||
             REFindNoCase( '^(' & variables.framework.unhandledPathRegex & ')',
-                            targetPath );
+                          targetPath );
     }
 
     /*
@@ -745,7 +745,7 @@ component {
     public void function onError( any exception, string event ) {
         try {
             if ( !structKeyExists( variables, 'framework' ) ||
-                    !structKeyExists( variables.framework, 'version' ) ) {
+                 !structKeyExists( variables.framework, 'version' ) ) {
                 // error occurred before framework was initialized
                 failure( exception, event, false, true );
                 return;
@@ -796,10 +796,6 @@ component {
             if ( !structKeyExists( request, 'context' ) ) {
                 request.context = { };
             }
-            // ensure request.privatecontext is available
-            if ( !structKeyExists( request, 'privatecontext' ) ) {
-                request.privatecontext = { };
-            }
             if ( !structKeyExists( request, 'base' ) ) {
                 if ( structKeyExists( variables, 'framework' ) && structKeyExists( variables.framework, 'base' ) ) {
                     request.base = variables.framework.base;
@@ -830,7 +826,7 @@ component {
      * this can be overridden if you want to change the behavior when
      * FW/1 cannot find a matching view
      */
-    public any function onMissingView( struct rc, struct prc ) {
+    public any function onMissingView( struct rc ) {
         // unable to find a matching view - fail with a nice exception
         viewNotFound();
         // if we got here, we would return the string or struct to be rendered
@@ -847,7 +843,7 @@ component {
      * being set when the error occurred as well as the request context structure.
      * You can also reference the cfcatch variable for details about the error.
      */
-    public void function onPopulateError( any cfc, string property, struct rc, struct prc ) {
+    public void function onPopulateError( any cfc, string property, struct rc ) {
     }
 
     /*
@@ -875,8 +871,8 @@ component {
 
         request._fw1.controllerExecutionStarted = true;
         if ( variables.framework.preflightOptions &&
-                request._fw1.cgiRequestMethod == "OPTIONS" &&
-                structCount( request._fw1.routeMethodsMatched ) ) {
+             request._fw1.cgiRequestMethod == "OPTIONS" &&
+             structCount( request._fw1.routeMethodsMatched ) ) {
             // OPTIONS support enabled and at least one possible match
             // bypass all normal controllers and render headers and data:
             var resp = getPageContext().getResponse();
@@ -919,7 +915,7 @@ component {
         } else {
             buildViewQueue();
             internalFrameworkTrace( 'setupView() called' );
-            setupView( rc = request.context, prc = request.privatecontext );
+            setupView( rc = request.context );
             if ( structKeyExists(request._fw1, 'view') ) {
                 internalFrameworkTrace( 'rendering #request._fw1.view#' );
                 out = internalView( request._fw1.view );
@@ -929,7 +925,7 @@ component {
             } else {
                 request._fw1.omvInProgress = true;
                 internalFrameworkTrace( 'onMissingView() called' );
-                out = onMissingView( rc = request.context, prc = request.privatecontext );
+                out = onMissingView( request.context );
             }
 
             buildLayoutQueue();
@@ -1303,8 +1299,8 @@ component {
                     internalFrameworkTrace( message = "FW/1: WARNING: setBeanFactory() called more than once - use diEngine = 'none'?", traceType = 'WARNING' );
                 } else {
                     throw( type = "FW1.Warning",
-                            message = "setBeanFactory() called more than once - use diEngine = 'none'?",
-                            detail = "Either set diEngine to 'none' or let FW/1 manage your bean factory for you." );
+                           message = "setBeanFactory() called more than once - use diEngine = 'none'?",
+                           detail = "Either set diEngine to 'none' or let FW/1 manage your bean factory for you." );
                 }
             }
             getFw1App().factory = beanFactory;
@@ -1362,7 +1358,7 @@ component {
      * override this to provide request-specific finalization
      * you do not need to call super.setupResponse()
      */
-    public void function setupResponse( struct rc, struct prc ) { }
+    public void function setupResponse( struct rc ) { }
 
     /*
      * override this to provide session-specific initialization
@@ -1391,7 +1387,7 @@ component {
      * populate the request context with globally required data
      * you do not need to call super.setupView()
      */
-    public void function setupView( struct rc, struct prc ) { }
+    public void function setupView( struct rc ) { }
 
     /*
      * use this to override the default view
@@ -1412,7 +1408,7 @@ component {
      * returns the UI generated by the named view
      */
     public any function view( string path, struct args = { },
-                                any missingView = { } ) {
+                              any missingView = { } ) {
         var viewPath = parseViewOrLayoutPath( path, 'view' );
         if ( cachedFileExists( viewPath ) ) {
             internalFrameworkTrace( 'view( #path# ) called - rendering #viewPath#' );
@@ -1427,7 +1423,7 @@ component {
             request._fw1.omvInProgress = true;
             internalFrameworkTrace( 'view( #path# ) called - onMissingView() called' );
             request.missingView = path;
-            return onMissingView( rc = request.context, prc = request.privatecontext );
+            return onMissingView( request.context );
         }
     }
 
@@ -1439,51 +1435,51 @@ component {
      *   this.mappings = moduleMappings( [ "mod1", "mod2"], "modules" );
      */
     public struct function moduleMappings( any modules, string modulePath = "modules" ) {
-        if ( isSimpleValue( modules ) ) modules = listToArray( modules );
-        var cleanModules = [ ];
-        var mappings = { };
-        for ( var m in modules ) {
-            m = trim( m );
-            arrayAppend( cleanModules, m );
-            mappings[ "/" & m ] = expandPath( "/" & modulePath & "/" & m );
-        }
-        variables._fw1_coldbox_modulePath = modulePath;
-        variables._fw1_coldbox_modules = cleanModules;
-        return mappings;
-    }
+    		if ( isSimpleValue( modules ) ) modules = listToArray( modules );
+    		var cleanModules = [ ];
+    		var mappings = { };
+    		for ( var m in modules ) {
+    			m = trim( m );
+    			arrayAppend( cleanModules, m );
+    			mappings[ "/" & m ] = expandPath( "/" & modulePath & "/" & m );
+    		}
+    		variables._fw1_coldbox_modulePath = modulePath;
+    		variables._fw1_coldbox_modules = cleanModules;
+    		return mappings;
+  	}
 
     /*
      * call this in setupApplication() to load the modules for which
      * you set up moduleMappings() using the function above -- the
      * frameworkPath argument can override the default location for FW/1
      */
-    public void function installModules( string frameworkPath = "framework" ) {
-            var bf = new "#frameworkPath#.WireBoxAdapter"();
-            getBeanFactory().setParent( bf );
-            var builder = bf.getBuilder();
-            var nullObject = new "#frameworkPath#.nullObject"();
-            var cbdsl = { };
-            cbdsl.init = function() { return cbdsl; };
-            cbdsl.process = function() { return nullObject; };
-            builder.vars = __vars;
-            builder.vars().instance.ColdBoxDSL = cbdsl;
-            for ( var module in variables._fw1_coldbox_modules ) {
-                var cfg = new "#variables._fw1_coldbox_modulePath#.#module#.ModuleConfig"();
-                cfg.vars = __vars;
-                cfg.vars().binder = bf.getBinder();
+  	public void function installModules( string frameworkPath = "framework" ) {
+    		var bf = new "#frameworkPath#.WireBoxAdapter"();
+    		getBeanFactory().setParent( bf );
+    		var builder = bf.getBuilder();
+    		var nullObject = new "#frameworkPath#.nullObject"();
+    		var cbdsl = { };
+    		cbdsl.init = function() { return cbdsl; };
+    		cbdsl.process = function() { return nullObject; };
+    		builder.vars = __vars;
+    		builder.vars().instance.ColdBoxDSL = cbdsl;
+    		for ( var module in variables._fw1_coldbox_modules ) {
+      			var cfg = new "#variables._fw1_coldbox_modulePath#.#module#.ModuleConfig"();
+      			cfg.vars = __vars;
+      			cfg.vars().binder = bf.getBinder();
             cfg.vars().controller = {
                 getWireBox : function() { return bf; }
             };
-                cfg.configure();
-                if ( structKeyExists( variables.framework, "modules" ) &&
-                    structKeyExists( variables.framework.modules, module ) ) {
-                    structAppend( cfg.vars().settings, variables.framework.modules[ module ] );
-                }
-                cfg.onLoad();
-            }
-    }
+      			cfg.configure();
+      			if ( structKeyExists( variables.framework, "modules" ) &&
+      	  			 structKeyExists( variables.framework.modules, module ) ) {
+			         structAppend( cfg.vars().settings, variables.framework.modules[ module ] );
+      			}
+      			cfg.onLoad();
+    		}
+  	}
     // helper to allow mixins:
-    private struct function __vars() { return variables; }
+  	private struct function __vars() { return variables; }
 
     // THE FOLLOWING METHODS SHOULD ALL BE CONSIDERED PRIVATE / UNCALLABLE
 
@@ -1586,7 +1582,7 @@ component {
         internalFrameworkTrace( 'building view queue', subsystem, section, item );
         // view and layout setup - used to be in setupRequestWrapper():
         request._fw1.view = parseViewOrLayoutPath( subsystem & variables.framework.subsystemDelimiter &
-                                                    section & '/' & item, 'view' );
+                                                   section & '/' & item, 'view' );
         if ( cachedFileExists( request._fw1.view ) ) {
             internalFrameworkTrace( 'found view #request._fw1.view#', subsystem, section, item );
         } else {
@@ -1622,8 +1618,8 @@ component {
     private void function deprecated( boolean throwit, string message ) {
         if ( throwit ) {
             throw( type="FW1.Deprecated",
-                    message="Deprecated: #message#",
-                    detail="This feature is deprecated: you need to configure FW/1 to allow it (or update your code)." );
+                   message="Deprecated: #message#",
+                   detail="This feature is deprecated: you need to configure FW/1 to allow it (or update your code)." );
         } else {
             var out = createObject( "java", "java.lang.System" ).out;
             out.println( "FW/1: DEPRECATED: " & message );
@@ -1636,7 +1632,7 @@ component {
         if ( structKeyExists( cfc, method ) ) {
             try {
                 internalFrameworkTrace( 'calling #lifecycle# controller', tuple.subsystem, tuple.section, method );
-                invoke( cfc, method, { rc : request.context, headers : request._fw1.headers, prc : request.privatecontext } );
+                invoke( cfc, method, { rc : request.context, headers : request._fw1.headers } );
             } catch ( any e ) {
                 setCfcMethodFailureInfo( cfc, method );
                 rethrow;
@@ -1644,7 +1640,7 @@ component {
         } else if ( structKeyExists( cfc, 'onMissingMethod' ) ) {
             try {
                 internalFrameworkTrace( 'calling #lifecycle# controller (via onMissingMethod)', tuple.subsystem, tuple.section, method );
-                invoke( cfc, method, { rc : request.context, method : lifecycle, headers : request._fw1.headers, prc : request.privatecontext } );
+                invoke( cfc, method, { rc : request.context, method : lifecycle, headers : request._fw1.headers } );
             } catch ( any e ) {
                 setCfcMethodFailureInfo( cfc, method );
                 rethrow;
@@ -1718,7 +1714,7 @@ component {
                     for ( var i = 1; i <= n; ++i ) {
                         var property = md.properties[ i ];
                         if ( implicitSetters ||
-                                structKeyExists( property, 'setter' ) && isBoolean( property.setter ) && property.setter ) {
+                             structKeyExists( property, 'setter' ) && isBoolean( property.setter ) && property.setter ) {
                             setters[ property.name ] = 'implicit';
                         }
                     }
@@ -1747,13 +1743,13 @@ component {
         // do not output trace information if we are rendering data as opposed
         // to rendering HTML views - see #226 and #232
         if ( request._fw1.doTrace &&
-                arrayLen( request._fw1.trace ) ) {
+             arrayLen( request._fw1.trace ) ) {
             setupTraceRender( structKeyExists( request._fw1, 'renderData' ) ? 'data' : 'html' );
         }
         // re-test to allow for setupTraceRender() handling / disabling tracing
         if ( request._fw1.doTrace &&
-                arrayLen( request._fw1.trace ) &&
-                !structKeyExists( request._fw1, 'renderData' ) ) {
+             arrayLen( request._fw1.trace ) &&
+             !structKeyExists( request._fw1, 'renderData' ) ) {
             var startTime = request._fw1.trace[1].tick;
             var font = 'font-family: verdana, helvetica;';
             writeOutput( '<hr /><div id="fw1_trace" style="background: ##ccdddd; color: black; border: 1px solid; border-color: black; padding: 5px; #font#">' );
@@ -1807,7 +1803,7 @@ component {
                     writeOutput( '<td style="text-align: center; color: #color#">#ucase(trace.t)#</td>' );
                 }
                 writeOutput( '<td style="border: 0; color: black; #font# font-size: small;padding-left: 5px;" width="10%">#action#</td>' );
-                writeOutput( '<td style="border: 0; color: #color#; #font# font-size: small;">#encodeForHTML(trace.msg)#' );
+                writeOutput( '<td style="border: 0; color: #color#; #font# font-size: small;">#trace.msg#' );
                 if ( structKeyExists( trace, 'v' ) ) {
                     writeOutput( '<br />' );
                     writeDump( var = trace.v, expand = false );
@@ -1966,7 +1962,6 @@ component {
 
     private string function internalLayout( string layoutPath, string body ) {
         var rc = request.context;
-        var prc = request.privatecontext;
         var $ = { };
         // integration point with Mura:
         if ( structKeyExists( rc, '$' ) ) {
@@ -1985,7 +1980,6 @@ component {
 
     private string function internalView( string viewPath, struct args = { } ) {
         var rc = request.context;
-        var prc = request.privatecontext;
         var $ = { };
         // integration point with Mura:
         if ( structKeyExists( rc, '$' ) ) {
@@ -2005,7 +1999,7 @@ component {
     private boolean function isFrameworkInitialized() {
         return structKeyExists( variables, 'framework' ) &&
             ( structKeyExists( request._fw1, 'theApp' ) ||
-                structKeyExists( application, variables.framework.applicationKey ) );
+              structKeyExists( application, variables.framework.applicationKey ) );
     }
 
     private boolean function isSubsystemInitialized( string subsystem ) {
@@ -2258,8 +2252,8 @@ component {
     private struct function render_jsonp( struct renderData ) {
         if ( !structKeyExists( renderData, 'jsonpCallback' ) || !len( renderData.jsonpCallback ) ){
             throw( type = 'FW1.jsonpCallbackRequired',
-                    message = 'Callback was not defined',
-                    detail = 'renderData() called with jsonp type requires a jsonpCallback' );
+                   message = 'Callback was not defined',
+                   detail = 'renderData() called with jsonp type requires a jsonpCallback' );
         }
         return {
             contentType = 'application/javascript; charset=utf-8',
@@ -2294,8 +2288,8 @@ component {
             }
         } else {
             throw( type = 'FW1.UnsupportXMLRender',
-                    message = 'Data is not XML',
-                    detail = 'renderData() called with XML type but unrecognized data format' );
+                   message = 'Data is not XML',
+                   detail = 'renderData() called with XML type but unrecognized data format' );
         }
         return {
             contentType = 'text/xml; charset=utf-8',
@@ -2325,8 +2319,8 @@ component {
                 out = renderType( request._fw1.renderData );
             } else {
                 throw( type = 'FW1.UnsupportedRenderType',
-                        message = 'Only HTML, JSON, JSONP, RAWJSON, XML, and TEXT are supported',
-                        detail = 'renderData() called with unknown type: ' & renderType );
+                       message = 'Only HTML, JSON, JSONP, RAWJSON, XML, and TEXT are supported',
+                       detail = 'renderData() called with unknown type: ' & renderType );
             }
         } else {
             // assume it is a function
@@ -2390,10 +2384,10 @@ component {
                 structAppend( request.context, sessionRead( preserveKeySessionKey ), false );
                 if ( variables.framework.maxNumContextsPreserved == 1 ) {
                     /*
-                    When multiple contexts are preserved, the oldest context is purged
-                    within getNextPreserveKeyAndPurgeOld once the maximum is reached.
-                    This allows for a browser refresh after the redirect to still receive
-                    the same context.
+                      When multiple contexts are preserved, the oldest context is purged
+                      within getNextPreserveKeyAndPurgeOld once the maximum is reached.
+                      This allows for a browser refresh after the redirect to still receive
+                      the same context.
                     */
                     sessionDelete( preserveKeySessionKey );
                 }
@@ -2723,7 +2717,7 @@ component {
                 break;
             case 'custom':
                 throw( type="FW1.IllegalConfiguration",
-                        message="If you specify diEngine='custom' you must specify a component path for diComponent." );
+                       message="If you specify diEngine='custom' you must specify a component path for diComponent." );
                 break;
             default:
                 // assume DI/1
@@ -2733,7 +2727,7 @@ component {
         }
         if ( structKeyExists( variables.framework, 'enableJSONPOST' ) ) {
             throw( type="FW1.IllegalConfiguration",
-                    message="The enableJSONPOST setting has been renamed to decodeRequestBody." );
+                   message="The enableJSONPOST setting has been renamed to decodeRequestBody." );
         }
         if ( !structKeyExists( variables.framework, 'decodeRequestBody' ) ) {
             variables.framework.decodeRequestBody = false;
@@ -2818,54 +2812,6 @@ component {
         }
     }
 
-    /**
-     * Starts with default framework configuration values and overrides these as required for any subsystem configurations which may exist; 
-     * creates the request.params key if it doesn't exist
-     */
-    private void function processRequestParams() {
-
-        if( !structkeyexists( request, "params" ) ) {
-
-            // start with default config values
-            request.params = { 
-                "decodeRequestBody" : variables.framework.decodeRequestBody, 
-                "routesCaseSensitive" : variables.framework.routesCaseSensitive,
-                "preflightOptions" : variables.framework.preflightOptions,       
-                "optionsAccessControl" : variables.framework.optionsAccessControl 
-            };
-
-            // if we're in a subsystem request and that subsystem has a specific config for it, apply those overrides
-            var subsystemConfig = getSubsystemConfig( getSubsystem( variables.framework.action ) );
-            if( !structisempty(subsystemConfig) ) {
-                for( var p in request.params ) {
-                    if( structkeyexists( subsystemConfig, p ) ) {
-                        request.params[p] = subsystemConfig[p];
-                    }
-                }
-            }
-
-        }
-
-    }
-
-    /**
-     * Returns the subsystem-aware value for the given parameter;  if request.params has not been 
-     * created when this function is called, it is created on the fly
-     *
-     * @name string     name of the parameter in request.params to return
-     * 
-     * @return any
-     */
-    private any function getRequestParam( required string name ) {
-        processRequestParams();
-        if( structkeyexists( request.params, arguments.name ) ) {
-            return request.params[arguments.name];
-        }
-        else {
-            throw( type="InvalidRequestParam", message="The [" & arguments.name & "] request parameter does not exist" );
-        }
-    }
-
     private void function setupRequestDefaults() {
         setupFrameworkDefaults();
         if ( !request._fw1.requestDefaultsInitialized ) {
@@ -2875,9 +2821,6 @@ component {
 
             if ( !structKeyExists(request, 'context') ) {
                 request.context = { };
-            }
-            if ( !structKeyExists(request, 'privatecontext') ) {
-                request.privatecontext = { };
             }
             // SES URLs by popular request :)
             if ( len( pathInfo ) > len( request._fw1.cgiScriptName ) && left( pathInfo, len( request._fw1.cgiScriptName ) ) == request._fw1.cgiScriptName ) {
@@ -2895,7 +2838,7 @@ component {
                 if ( routeMatch.matched ) {
                     internalFrameworkTrace( 'route matched - #routeMatch.route# - #pathInfo#' );
                     var routeTail = '';
-                    if ( getRequestParam("routesCaseSensitive") ) {
+                    if ( variables.framework.routesCaseSensitive ) {
                         pathInfo = rereplace( routeMatch.path, routeMatch.pattern, routeMatch.target );
                         routeTail = rereplace( routeMatch.path, routeMatch.pattern, '' );
                     } else {
@@ -2909,7 +2852,7 @@ component {
                         request._fw1.route = routeMatch.route;
                     }
                 }
-            } else if ( getRequestParam("preflightOptions") && request._fw1.cgiRequestMethod == "OPTIONS" ) {
+            } else if ( variables.framework.preflightOptions && request._fw1.cgiRequestMethod == "OPTIONS" ) {
                 // non-route matching but we have OPTIONS support enabled
                 request._fw1.routeMethodsMatched.get = true;
                 request._fw1.routeMethodsMatched.post = true;
@@ -2954,7 +2897,7 @@ component {
             // certain remote calls do not have URL or form scope:
             if ( isDefined( 'URL'  ) ) structAppend( request.context, URL );
             var httpData = getHttpRequestData();
-            if ( getRequestParam("decodeRequestBody") ) {
+            if ( variables.framework.decodeRequestBody ) {
                 // thanks to Adam Tuttle and by proxy Jason Dean and Ray Camden for the
                 // seed of this code, inspired by Taffy's basic deserialization
                 // also thanks to John Whish for the URL-encoded form support
@@ -2968,13 +2911,13 @@ component {
                         try {
                             var bodyStruct = read_json( body );
                             if ( isStruct( bodyStruct ) ) {
-                                structAppend( request.context, bodyStruct );
+							    structAppend( request.context, bodyStruct );
 							} else {
-                                request.context[ 'body' ] = bodyStruct;
+							    request.context[ 'body' ] = bodyStruct;
 							}
                         } catch ( any e ) {
                             throw( type = "FW1.JSONPOST",
-                                    message = "Content-Type implies JSON but could not deserialize body: " & e.message );
+                                   message = "Content-Type implies JSON but could not deserialize body: " & e.message );
                         }
                         break;
                     case "application/x-www-form-urlencoded":
@@ -2992,7 +2935,7 @@ component {
                             }
                         } catch ( any e ) {
                             throw( type = "FW1.JSONPOST",
-                                    message = "Content-Type implies form encoded but could not deserialize body: " & e.message );
+                                   message = "Content-Type implies form encoded but could not deserialize body: " & e.message );
                         }
                         break;
                     default:
@@ -3039,7 +2982,7 @@ component {
 
     private void function setupResponseWrapper() {
         internalFrameworkTrace( 'setupResponse() called' );
-        setupResponse( rc = request.context, prc = request.privatecontext );
+        setupResponse( rc = request.context );
     }
 
     private void function setupSessionWrapper() {
@@ -3104,7 +3047,7 @@ component {
         // check for forward and backward slash in the action - using chr() to avoid confusing TextMate (Hi Nathan!)
         if ( findOneOf( chr(47) & chr(92), action ) > 0 ) {
             throw( type='FW1.actionContainsSlash', message="Found a slash in the action: '#action#'.",
-                    detail='Actions are not allowed to embed sub-directory paths.');
+                   detail='Actions are not allowed to embed sub-directory paths.');
         }
         return action;
     }
@@ -3115,7 +3058,7 @@ component {
         // the exception we actually want to throw!
         param name="request.missingView" default="<unknown.view>";
         throw( type='FW1.viewNotFound', message="Unable to find a view for '#request.action#' action.",
-                detail="'#request.missingView#' does not exist." );
+               detail="'#request.missingView#' does not exist." );
     }
 
 }

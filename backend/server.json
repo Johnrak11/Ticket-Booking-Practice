@@ -2,7 +2,7 @@
     "name":"ticket-booking",
     "openBrowser":"${openBrowser}",
     "app":{
-        "cfengine":"adobe@2021"
+        "cfengine":"adobe@2023"
     },
     "web":{
         "host":"${host}",
@@ -10,5 +10,11 @@
             "port":"${httpPort}"
         }
     },
-    "cfconfigfile":"config/.cfconfig.json"
+    "cfconfigfile":"config/.cfconfig.json",
+    "JVM":{
+        "args":"-Duser.country=EN -Duser.language=en -Djava.net.useSystemProxies=true -Duser.timezone=Europe/Paris -Dfile.encoding=UTF-8"
+    },
+    "scripts":{
+        "onServerInstall":"cfpm install mail,sqlserver,debugger,document,caching,pdf,spreadsheet,ajax,orm"
+    }
 }
